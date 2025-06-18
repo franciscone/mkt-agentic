@@ -5,7 +5,7 @@ FROM python:3.11-slim
 RUN apt-get update && apt-get install -y build-essential curl
 
 # Cria pasta de trabalho
-WORKDIR /app
+WORKDIR /mkt-agentic
 
 # Copia dependências
 COPY requirements.txt .

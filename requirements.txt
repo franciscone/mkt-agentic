@@ -1,5 +1,8 @@
 crewai
 openai
 langchain
+langchain-community
+huggingface_hub
+langgraph
 duckduckgo-search
 pydantic
