@@ -1,20 +1,14 @@
-# Dockerfile
 FROM python:3.11-slim
 
-# Evita erros com dependências
 RUN apt-get update && apt-get install -y build-essential curl
 
-# Cria pasta de trabalho
 WORKDIR /mkt-agentic
 
-# Copia dependências
-COPY requirements.txt .
-
-# Instala dependências
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Copia o código
 COPY . .
 
-# Comando padrão
+RUN pip install --trusted-host files.pythonhosted.org \
+    --trusted-host pypi.org \
+    --trusted-host pypi.python.org \
+    --no-cache-dir -r requirements.txt
+
 CMD ["python", "src/main.py"]

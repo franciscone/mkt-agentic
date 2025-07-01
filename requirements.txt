@@ -1,8 +1,7 @@
-crewai
-openai
 langchain
+langchain-huggingface
 langchain-community
 huggingface_hub
 langgraph
-duckduckgo-search
+python-dotenv
 pydantic

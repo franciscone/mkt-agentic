@@ -1,29 +1,26 @@
-from langchain_community.llms import HuggingFaceEndpoint
-from langgraph.prebuilt import create_react_agent
 import os
+from dotenv import load_dotenv
+from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+from huggingface_hub import login
 
-# Certifique-se de que sua variável de ambiente está definida
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = ""
+load_dotenv()
+HUGGINGFACEHUB_API_TOKEN = os.getenv('HF_API_TOKEN')
+login(token=HUGGINGFACEHUB_API_TOKEN)
 
 llm = HuggingFaceEndpoint(
-    repo_id="meta-llama/Llama-3-8b-chat-hf",  # ou outro modelo disponível
-    task="text-generation",  # ou "text2text-generation" dependendo do modelo
-    temperature=0.7,
-    max_new_tokens=512
+    repo_id="google/gemma-2-2b-it",
+    task="text-generation",
+    max_new_tokens=10,
+    do_sample=False,
+    repetition_penalty=1.03
 )
 
+chat = ChatHuggingFace(llm=llm, verbose=True)
 
-def get_weather(city: str) -> str:  
-    """Get weather for a given city."""
-    return f"It's always sunny in {city}!"
+messages = [
+    ("system", "You are a helpful translator. Translate the user sentence to French."),
+    ("human", "I love programming."),
+]
 
-agent = create_react_agent(
-    model=llm, 
-    tools=[], 
-    prompt="Você é um assistente inteligente e detalhado."
-)
-
-# Run the agent
-agent.invoke(
-    {"messages": [{"role": "user", "content": "what is the weather in sf"}]}
-)
+response = chat.invoke(messages)
+print(response.content)
